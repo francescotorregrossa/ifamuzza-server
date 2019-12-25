@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ifamuzza.ingegneriadelsoftware.model.receipt.ReceiptCreditCard;
+import com.ifamuzza.ingegneriadelsoftware.model.receipt.ReceiptInvalid;
 import com.ifamuzza.ingegneriadelsoftware.model.receipt.ReceiptMethod;
 import com.ifamuzza.ingegneriadelsoftware.model.receipt.ReceiptPayPal;
 import com.ifamuzza.ingegneriadelsoftware.utils.Geocoder;
@@ -62,15 +63,21 @@ public class Restaurant extends User {
     
     if (receiptMethod != null) {
       String type = JsonUtils.getString(receiptMethod, "type");
-      switch (type) {
-        case "creditcard":
-          setReceiptMethod(new ReceiptCreditCard(receiptMethod));
-          break;
-        case "paypal":
-          setReceiptMethod(new ReceiptPayPal(receiptMethod));
-          break;
-        default:
-          break;
+      if (type == null) {
+        setReceiptMethod(new ReceiptInvalid());
+      }
+      else {
+        switch (type) {
+          case "creditcard":
+            setReceiptMethod(new ReceiptCreditCard(receiptMethod));
+            break;
+          case "paypal":
+            setReceiptMethod(new ReceiptPayPal(receiptMethod));
+            break;
+          default:
+            setReceiptMethod(new ReceiptInvalid());
+            break;
+        }
       }
     }
   }

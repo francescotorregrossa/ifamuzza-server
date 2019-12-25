@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ifamuzza.ingegneriadelsoftware.model.payment.PaymentCreditCard;
+import com.ifamuzza.ingegneriadelsoftware.model.payment.PaymentInvalid;
 import com.ifamuzza.ingegneriadelsoftware.model.payment.PaymentMethod;
 import com.ifamuzza.ingegneriadelsoftware.model.payment.PaymentPayPal;
 import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
@@ -40,16 +41,22 @@ public class Customer extends User {
     setAddress(JsonUtils.getString(data, "address"));
     setAllergies(JsonUtils.getString(data, "allergies"));
     if (paymentMethod != null) {
-      String type = paymentMethod.get("type").asText(null);
-      switch (type) {
-        case "creditcard":
-          setPaymentMethod(new PaymentCreditCard(paymentMethod));
-          break;
-        case "paypal":
-          setPaymentMethod(new PaymentPayPal(paymentMethod));
-          break;
-        default:
-          break;
+      String type = JsonUtils.getString(paymentMethod, "type");
+      if (type == null) {
+        setPaymentMethod(new PaymentInvalid());
+      }
+      else {
+        switch (type) {
+          case "creditcard":
+            setPaymentMethod(new PaymentCreditCard(paymentMethod));
+            break;
+          case "paypal":
+            setPaymentMethod(new PaymentPayPal(paymentMethod));
+            break;
+          default:
+            setPaymentMethod(new PaymentInvalid());
+            break;
+        }
       }
     }
   }
