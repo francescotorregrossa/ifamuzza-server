@@ -15,9 +15,9 @@ import com.byteowls.jopencage.model.JOpenCageResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.ifamuzza.ingegneriadelsoftware.model.Customer;
-import com.ifamuzza.ingegneriadelsoftware.model.Restaurant;
-import com.ifamuzza.ingegneriadelsoftware.model.User;
+import com.ifamuzza.ingegneriadelsoftware.model.users.Customer;
+import com.ifamuzza.ingegneriadelsoftware.model.users.Restaurant;
+import com.ifamuzza.ingegneriadelsoftware.model.users.User;
 import com.ifamuzza.ingegneriadelsoftware.model.payment.PaymentMethod;
 import com.ifamuzza.ingegneriadelsoftware.repository.UserRepository;
 import com.ifamuzza.ingegneriadelsoftware.utils.Geocoder;
@@ -128,8 +128,8 @@ public class ApiHandler {
 			return null;
 		}
 
-		String error = c.validate();
-		if (error != "email" && error != "password") {
+		List<String> error = c.validate();
+		if (!error.contains("email") && !error.contains("password")) {
 
 			// check if the user exists
 			User u = getUserForEmail(c.getEmail());
@@ -159,7 +159,7 @@ public class ApiHandler {
 			}
 		}
 
-		endClientSession(response, error);
+		endClientSession(response, String.join(", ", error));
 		return null;
 	}
 
@@ -177,8 +177,8 @@ public class ApiHandler {
 				return null;
 		}
 
-		String error = r.validate();
-		if (error != "email" && error != "password") {
+		List<String> error = r.validate();
+		if (!error.contains("email") && !error.contains("password")) {
 
 			// check if the user exists
 			User u = getUserForEmail(r.getEmail());
@@ -209,7 +209,7 @@ public class ApiHandler {
 
 		}
 
-		endClientSession(response, error);
+		endClientSession(response, String.join(", ", error));
 		return null;
 	}
 
@@ -228,8 +228,8 @@ public class ApiHandler {
 			return null;
 		}
 
-		String error = c.validate();
-		if (error == null) {
+		List<String> error = c.validate();
+		if (error.isEmpty()) {
 			
 			// check for conflicts with existing users
 			if (getUserForEmail(c.getEmail()) != null) {
@@ -255,7 +255,7 @@ public class ApiHandler {
 
 		}
 		else {
-			endClientSession(response, error);
+			endClientSession(response, String.join(", ", error));
 			return null;
 		}
 		
@@ -275,8 +275,8 @@ public class ApiHandler {
 			return null;
 		}
 		
-		String error = r.validate();
-		if (error == null) {
+		List<String> error = r.validate();
+		if (error.isEmpty()) {
 			
 			// check for conflicts with existing users
 			if (getUserForEmail(r.getEmail()) != null) {
@@ -299,7 +299,7 @@ public class ApiHandler {
 			
 		}
 		else {
-			endClientSession(response, error);
+			endClientSession(response, String.join(", ", error));
 			return null;
 		}
 	}

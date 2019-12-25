@@ -1,6 +1,7 @@
-package com.ifamuzza.ingegneriadelsoftware.model;
+package com.ifamuzza.ingegneriadelsoftware.model.users;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.persistence.Basic;
@@ -110,68 +111,70 @@ public class Restaurant extends User {
   }
 
   @Override
-  public String validate() {
-    String basic = super.validate();
-    if (basic != null) {
-      return basic;
-    }
+  public List<String> validate() {
+    List<String> reasons = super.validate();
 
     if (name == null) {
-      return "name";
+      reasons.add("name");
     }
-    if (address == null || latitude == null || longitude == null) {
-      return "address";
-    }
-    if (openingTime == null) {
-      return "openingTime";
-    }
-    if (phone == null) {
-      return "phone";
-    }
-    if (downPayment == null) {
-      return "downPayment";
-    }
-    if (receiptMethod == null) {
-      return "receiptMethod";
-    }
-
-
-    Pattern namePattern = Pattern.compile("^([a-zA-Z ]){2,200}$");
-    if (!namePattern.matcher(name).matches()) {
-      return "name";
-    }
-
-    Pattern addressPattern = Pattern.compile("^([a-zA-Z0-9 ,]){2,200}$");
-    if (!addressPattern.matcher(address).matches()) {
-      return "address";
-    }
-
-    if (openingTime.length == 0 || openingTime.length > 7) {
-      return "openingTime";
-    }
-
-    Pattern openingTimePattern = Pattern.compile("^((mon)|(tue)|(wed)|(thu)|(fri)|(sat)|(sun)) (([01]?[0-9]|2[0-3]):[0-5][0-9]-([01]?[0-9]|2[0-3]):[0-5][0-9])$");
-    for (String ot: openingTime) {
-      if (!openingTimePattern.matcher(ot).matches()) {
-        return "openingTime";
+    else {
+      Pattern namePattern = Pattern.compile("^([a-zA-Z ]){2,200}$");
+      if (!namePattern.matcher(name).matches()) {
+        reasons.add("name");
       }
     }
-    
-    Pattern phonePattern = Pattern.compile("^\\+(?:[0-9] ?){6,14}[0-9]$");
-    if (!phonePattern.matcher(phone).matches()) {
-      return "phone";
+
+    if (address == null || latitude == null || longitude == null) {
+      reasons.add("address");
+    }
+    else {
+      Pattern addressPattern = Pattern.compile("^([a-zA-Z0-9 ,]){2,200}$");
+      if (!addressPattern.matcher(address).matches()) {
+        reasons.add("address");
+      }
     }
 
-    if (downPayment < 0 || downPayment > 100) {
-      return "downPayment";
+    if (openingTime == null || (openingTime.length == 0 || openingTime.length > 7)) {
+      reasons.add("openingTime");
+    }
+    else {  
+      Pattern openingTimePattern = Pattern.compile("^((mon)|(tue)|(wed)|(thu)|(fri)|(sat)|(sun)) (([01]?[0-9]|2[0-3]):[0-5][0-9]-([01]?[0-9]|2[0-3]):[0-5][0-9])$");
+      for (String ot: openingTime) {
+        if (!openingTimePattern.matcher(ot).matches()) {
+          reasons.add("openingTime");
+        }
+      }
     }
 
-    String receiptValidation = receiptMethod.validate();
-    if (receiptValidation != null) {
-      return "receipt." + receiptValidation;
+    if (phone == null) {
+      reasons.add("phone");
+    }
+    else {
+      Pattern phonePattern = Pattern.compile("^\\+(?:[0-9] ?){6,14}[0-9]$");
+      if (!phonePattern.matcher(phone).matches()) {
+        reasons.add("phone");
+      }
     }
 
-    return null;
+
+    if (downPayment == null) {
+      reasons.add("downPayment");
+    }
+    else {
+      if (downPayment < 0 || downPayment > 100) {
+        reasons.add("downPayment");
+      }
+    }
+
+    if (receiptMethod == null) {
+      reasons.add("receiptMethod");
+    }
+    else {
+      List<String> receiptValidation = receiptMethod.validate();
+      reasons.addAll(receiptValidation);
+    }
+
+    return reasons;
   }
 
   public String getName() { return name; }

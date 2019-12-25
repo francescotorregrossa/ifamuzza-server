@@ -1,5 +1,7 @@
 package com.ifamuzza.ingegneriadelsoftware.model.payment;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.persistence.Basic;
@@ -11,6 +13,7 @@ import javax.persistence.InheritanceType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ifamuzza.ingegneriadelsoftware.model.Validable;
 import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
 
 import javax.persistence.GeneratedValue;
@@ -18,7 +21,7 @@ import javax.persistence.GenerationType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class PaymentMethod {
+public abstract class PaymentMethod implements Validable {
 
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
@@ -42,28 +45,31 @@ public abstract class PaymentMethod {
     return node;
   }
   
-  public String validate() {
-    
+  @Override
+  public List<String> validate() {
+    List<String> reasons = new ArrayList<>();
+
     if (holder == null) {
-      return "holder";
+      reasons.add("holder");
+    }
+    else {
+      Pattern holderPattern = Pattern.compile("^([a-zA-Z ]){2,200}$");
+      if (!holderPattern.matcher(holder).matches()) {
+        reasons.add("holder");
+      }
     }
 
     if (address == null) {
-      return "address";
+      reasons.add("address");
+    }
+    else {
+      Pattern addressPattern = Pattern.compile("^([a-zA-Z0-9 ,]){2,200}$");
+      if (!addressPattern.matcher(address).matches()) {
+        reasons.add("address");
+      }
     }
 
-    Pattern holderPattern = Pattern.compile("^([a-zA-Z ]){2,200}$");
-    if (!holderPattern.matcher(holder).matches()) {
-      return "holder";
-    }
-
-    Pattern addressPattern = Pattern.compile("^([a-zA-Z0-9 ,]){2,200}$");
-    if (!addressPattern.matcher(address).matches()) {
-      return "address";
-    }
-
-    return null;
-    
+    return reasons;
   }
 
   public abstract Boolean pay();

@@ -1,5 +1,6 @@
 package com.ifamuzza.ingegneriadelsoftware.model.payment;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.persistence.Basic;
@@ -38,52 +39,50 @@ public class PaymentCreditCard extends PaymentMethod {
   }
 
   @Override
-  public String validate() {
-    String basic = super.validate();
-    if (basic != null) {
-      return basic;
-    }
+  public List<String> validate() {
+    List<String> reasons = super.validate();
 
     if (number == null) {
-      return "number";
+      reasons.add("number");
+    }
+    else {
+      String regex = "^(?:(?<visa>4[0-9]{12}(?:[0-9]{3})?)|" +
+      "(?<mastercard>5[1-5][0-9]{14})|" +
+      "(?<discover>6(?:011|5[0-9]{2})[0-9]{12})|" +
+      "(?<amex>3[47][0-9]{13})|" +
+      "(?<diners>3(?:0[0-5]|[68][0-9])?[0-9]{11})|" +
+      "(?<jcb>(?:2131|1800|35[0-9]{3})[0-9]{11}))$";
+
+      Pattern pattern = Pattern.compile(regex);
+      if (!pattern.matcher(number).matches()) {
+        reasons.add("number");
+      }
+      else if (!Luhn.Check(number)) {
+        reasons.add("number");
+      }
     }
 
     if (ccv == null) {
-      return "ccv";
+      reasons.add("ccv");
+    }
+    else {
+      Pattern ccvPattern = Pattern.compile("^[0-9]{3,4}$");
+      if (!ccvPattern.matcher(ccv).matches()) {
+        reasons.add("ccv");
+      }
     }
 
     if (expDate == null) {
-      return "expDate";
+      reasons.add("expDate");
+    }
+    else {
+      Pattern expDatePattern = Pattern.compile("^(0[1-9]|1[0-2])\\/([0-9]{4}|[0-9]{2})$");
+      if (!expDatePattern.matcher(expDate).matches()) {
+        reasons.add("expDate");
+      }
     }
 
-    String regex = "^(?:(?<visa>4[0-9]{12}(?:[0-9]{3})?)|" +
-        "(?<mastercard>5[1-5][0-9]{14})|" +
-        "(?<discover>6(?:011|5[0-9]{2})[0-9]{12})|" +
-        "(?<amex>3[47][0-9]{13})|" +
-        "(?<diners>3(?:0[0-5]|[68][0-9])?[0-9]{11})|" +
-        "(?<jcb>(?:2131|1800|35[0-9]{3})[0-9]{11}))$";
- 
-    Pattern pattern = Pattern.compile(regex);
-    if (!pattern.matcher(number).matches()) {
-      return "number";
-    }
-
-    if (!Luhn.Check(number)) {
-      return "number";
-    }
-
-    Pattern ccvPattern = Pattern.compile("^[0-9]{3,4}$");
-    if (!ccvPattern.matcher(ccv).matches()) {
-      return "ccv";
-    }
-
-    Pattern expDatePattern = Pattern.compile("^(0[1-9]|1[0-2])\\/?([0-9]{4}|[0-9]{2})$");
-    if (!expDatePattern.matcher(expDate).matches()) {
-      return "expDate";
-    }
-
-    return null;
-    
+    return reasons;    
   }
 
   @Override

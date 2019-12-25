@@ -1,5 +1,6 @@
-package com.ifamuzza.ingegneriadelsoftware.model;
+package com.ifamuzza.ingegneriadelsoftware.model.users;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.persistence.Basic;
@@ -78,43 +79,38 @@ public class Customer extends User {
   }
 
   @Override
-  public String validate() {
-    String basic = super.validate();
-    if (basic != null) {
-      return basic;
-    }
-
+  public List<String> validate() {
+    List<String> reasons = super.validate();
+    
     Pattern namePattern = Pattern.compile("^([a-zA-Z ]){2,100}$");
     if (firstName != null && !namePattern.matcher(firstName).matches()) {
-      return "firstName";
+      reasons.add("firstName");
     }
     if (lastName != null && !namePattern.matcher(lastName).matches()) {
-      return "lastName";
+      reasons.add("lastName");
     }
 
     Pattern phonePattern = Pattern.compile("^\\+(?:[0-9] ?){6,14}[0-9]$");
     if (phone != null && !phonePattern.matcher(phone).matches()) {
-      return "phone";
+      reasons.add("phone");
     }
 
     Pattern addressPattern = Pattern.compile("^([a-zA-Z0-9 ,]){2,200}$");
     if (address != null && !addressPattern.matcher(address).matches()) {
-      return "address";
+      reasons.add("address");
     }
 
     Pattern allergiesPattern = Pattern.compile("^([a-zA-Z0-9 ,]){2,200}$");
     if (allergies != null && !allergiesPattern.matcher(allergies).matches()) {
-      return "allergies";
+      reasons.add("allergies");
     }
 
     if (paymentMethod != null) {
-      String paymentValidation = paymentMethod.validate();
-      if (paymentMethod != null && paymentValidation != null) {
-        return "payment." + paymentValidation;
-      }
+      List<String> paymentValidation = paymentMethod.validate();
+      reasons.addAll(paymentValidation);
     }
 
-    return null;
+    return reasons;
   }
 
   public String getFirstName() { return firstName; }

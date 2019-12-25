@@ -1,5 +1,7 @@
 package com.ifamuzza.ingegneriadelsoftware.model.receipt;
 
+import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 
@@ -29,17 +31,14 @@ public class ReceiptPayPal extends ReceiptMethod {
   }
 
   @Override
-  public String validate() {
-    String basic = super.validate();
-    if (basic != null) {
-      return basic;
-    }
+  public List<String> validate() {
+    List<String> reasons = super.validate();
 
     if (payPalAccessToken == null) {
-      return "payPalAccessToken";
+      reasons.add("payPalAccessToken");
     }
 
-    return null;
+    return reasons;
   }
 
   @Override

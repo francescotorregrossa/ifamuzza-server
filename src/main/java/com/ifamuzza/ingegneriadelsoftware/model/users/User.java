@@ -1,8 +1,10 @@
-package com.ifamuzza.ingegneriadelsoftware.model;
+package com.ifamuzza.ingegneriadelsoftware.model.users;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.persistence.Basic;
@@ -16,11 +18,12 @@ import javax.persistence.InheritanceType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ifamuzza.ingegneriadelsoftware.model.Validable;
 import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class User {
+public abstract class User implements Validable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -44,32 +47,35 @@ public abstract class User {
     return node;
   }
   
-  public String validate() {
+  @Override
+  public List<String> validate() {
 
+    List<String> reasons = new ArrayList<>();
     if (email == null) {
-      return "email";
+      reasons.add("email");
+    }
+    else {
+      email = email.trim();
+      // check email correctness
+      Pattern emailPattern = Pattern.compile("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$");
+      if (!emailPattern.matcher(email).matches()) {
+        reasons.add("email");
+      }
     }
 
     if (password == null) {
-      return "password";
+      reasons.add("password");
+    }
+    else {
+      password = password.trim();
+      // check password strength
+      Pattern passwordPattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
+      if (!passwordPattern.matcher(password).matches()) {
+        reasons.add("password");
+      }
     }
 
-    email = email.trim();
-    password = password.trim();
-
-    // check email correctness
-    Pattern emailPattern = Pattern.compile("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$");
-    if (!emailPattern.matcher(email).matches()) {
-      return "email";
-    }
-    
-    // check password strength
-    Pattern passwordPattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
-    if (!passwordPattern.matcher(password).matches()) {
-      return "password";
-    }
-
-    return null;
+    return reasons;
 
   }
 

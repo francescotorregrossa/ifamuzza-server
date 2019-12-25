@@ -1,6 +1,6 @@
 package com.ifamuzza.ingegneriadelsoftware.repository;
 
-import com.ifamuzza.ingegneriadelsoftware.model.User;
+import com.ifamuzza.ingegneriadelsoftware.model.users.User;
 
 import org.springframework.data.repository.CrudRepository;;
 
