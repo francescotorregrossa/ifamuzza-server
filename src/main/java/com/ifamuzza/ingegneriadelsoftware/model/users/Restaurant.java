@@ -99,13 +99,14 @@ public class Restaurant extends User {
     return node;
   }
 
+  @Override
   public ObjectNode publicSerialize() {
+    ObjectNode node = super.publicSerialize();
     ObjectMapper mapper = new ObjectMapper();
     ArrayNode openingTime = mapper.createArrayNode();
     for (String time: getOpeningTime()) {
       openingTime.add(time);
     }
-    ObjectNode node = mapper.createObjectNode();
     node.put("id", getId());
     node.put("name", getName());
     node.put("address", getAddress());

@@ -86,6 +86,19 @@ public class Customer extends User {
   }
 
   @Override
+  public ObjectNode publicSerialize() {
+    ObjectNode node = super.publicSerialize();
+    node.put("id", getId());
+    if (getFirstName() != null) {
+      node.put("firstName", getFirstName());
+    }
+    if (getLasttName() != null) {
+      node.put("lastName", getLasttName());
+    }
+    return node;
+  }
+
+  @Override
   public List<String> validate() {
     List<String> reasons = super.validate();
     

@@ -18,12 +18,14 @@ import javax.persistence.InheritanceType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ifamuzza.ingegneriadelsoftware.model.JsonPrivateSerialization;
+import com.ifamuzza.ingegneriadelsoftware.model.JsonPublicSerialization;
 import com.ifamuzza.ingegneriadelsoftware.model.Validable;
 import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class User implements Validable {
+public abstract class User implements Validable, JsonPrivateSerialization, JsonPublicSerialization {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,12 +42,22 @@ public abstract class User implements Validable {
     setEmail(JsonUtils.getString(data, "email"));
     setPassword(JsonUtils.getString(data, "password"));
   }
+
+  @Override
   public ObjectNode serialize() {
     ObjectMapper mapper = new ObjectMapper();
     ObjectNode node = mapper.createObjectNode();
     node.put("email", getEmail());
     return node;
   }
+
+  @Override
+  public ObjectNode publicSerialize() {
+    ObjectMapper mapper = new ObjectMapper();
+    ObjectNode node = mapper.createObjectNode();
+    return node;
+  }
+  
   
   @Override
   public List<String> validate() {
@@ -88,7 +100,6 @@ public abstract class User implements Validable {
   public String getEmail() { return email; }
   public void setEmail(String email) { this.email = email == null ? null : email.trim(); }
 
-  // public String getPassword() { return password; }
   public void setPassword(String password) {
 
     if (password == null) {
@@ -104,8 +115,6 @@ public abstract class User implements Validable {
       e.printStackTrace();
     }
   }
-
   public String getHashedPassword() { return hashedPassword; }
-  // private void setHashedPassword(String password) { this.hashedPassword = password == null ? null : password; }
 
 }

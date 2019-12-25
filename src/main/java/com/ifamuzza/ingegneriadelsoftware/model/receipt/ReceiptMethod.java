@@ -13,6 +13,7 @@ import javax.persistence.InheritanceType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ifamuzza.ingegneriadelsoftware.model.JsonPrivateSerialization;
 import com.ifamuzza.ingegneriadelsoftware.model.Validable;
 import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
 
@@ -21,7 +22,7 @@ import javax.persistence.GenerationType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class ReceiptMethod implements Validable {
+public abstract class ReceiptMethod implements Validable, JsonPrivateSerialization {
 
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
@@ -37,6 +38,7 @@ public abstract class ReceiptMethod implements Validable {
     setAddress(JsonUtils.getString(data, "address"));
   }
 
+  @Override
   public ObjectNode serialize() {
     ObjectMapper mapper = new ObjectMapper();
     ObjectNode node = mapper.createObjectNode();
