@@ -21,8 +21,7 @@ import com.ifamuzza.ingegneriadelsoftware.model.users.User;
 import com.ifamuzza.ingegneriadelsoftware.model.payment.PaymentMethod;
 import com.ifamuzza.ingegneriadelsoftware.repository.UserRepository;
 import com.ifamuzza.ingegneriadelsoftware.utils.Geocoder;
-import com.ifamuzza.ingegneriadelsoftware.repository.PaymentMethodRepository;
-import com.ifamuzza.ingegneriadelsoftware.repository.ReceiptMethodRepository;
+import com.ifamuzza.ingegneriadelsoftware.repository.MethodRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,8 +39,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ApiHandler {
 	
 	@Autowired private UserRepository userRepository;
-	@Autowired private PaymentMethodRepository paymentMethodRepository;
-	@Autowired private ReceiptMethodRepository receiptMethodRepository;
+	@Autowired private MethodRepository methodRepository;
+	// @Autowired private MethodRepository<PaymentMethod> methodRepository;
 
 
 	@GetMapping(value = "/search", produces = "application/json")
@@ -247,7 +246,7 @@ public class ApiHandler {
 			// save the payment method (if given) and the new user
 			PaymentMethod p = c.getPaymentMethod();
 			if (p != null) {
-				paymentMethodRepository.save(p);
+				methodRepository.save(p);
 			}
 			userRepository.save(c);
 
@@ -292,7 +291,7 @@ public class ApiHandler {
 			r.setAccessToken(accessToken);
 
 			// save the receipt method and the new user
-			receiptMethodRepository.save(r.getReceiptMethod());
+			methodRepository.save(r.getReceiptMethod());
 			userRepository.save(r);
 
 			return null;

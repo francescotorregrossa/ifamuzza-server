@@ -1,4 +1,4 @@
-package com.ifamuzza.ingegneriadelsoftware.model.receipt;
+package com.ifamuzza.ingegneriadelsoftware.model.payment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,6 @@ import javax.persistence.InheritanceType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.ifamuzza.ingegneriadelsoftware.model.JsonPrivateSerialization;
-import com.ifamuzza.ingegneriadelsoftware.model.Validable;
 import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
 
 import javax.persistence.GeneratedValue;
@@ -22,18 +20,18 @@ import javax.persistence.GenerationType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class ReceiptMethod implements Validable, JsonPrivateSerialization {
+public abstract class BaseMethod implements Method {
 
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
-  private Integer id;
+  public Integer id;
 
-  @Basic(optional = false) private String holder;
-  @Basic(optional = false) private String address;
+  @Basic(optional = false) public String holder;
+  @Basic(optional = false) public String address;
 
-  public ReceiptMethod() { }
-
-  public ReceiptMethod(JsonNode data) {
+  public BaseMethod() { }
+  
+  public BaseMethod(JsonNode data) {
     setHolder(JsonUtils.getString(data, "holder"));
     setAddress(JsonUtils.getString(data, "address"));
   }
@@ -74,15 +72,13 @@ public abstract class ReceiptMethod implements Validable, JsonPrivateSerializati
     return reasons;
   }
 
-  public abstract Boolean pay();
-
   public Integer getId() { return id; }
-  public void setId(final Integer id) { this.id = id; }
+  public void setId(Integer id) { this.id = id; }
 
   public String getHolder() { return holder; }
-  public void setHolder(final String holder) { this.holder = holder; }
+  public void setHolder(String holder) { this.holder = holder.trim(); }
 
   public String getAddress() { return address; }
-  public void setAddress(final String address) { this.address = address; }
+  public void setAddress(String address) { this.address = address.trim(); }
 
 }

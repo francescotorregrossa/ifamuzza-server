@@ -1,4 +1,4 @@
-package com.ifamuzza.ingegneriadelsoftware.model.receipt;
+package com.ifamuzza.ingegneriadelsoftware.model.payment;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -12,23 +12,29 @@ import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
 import com.ifamuzza.ingegneriadelsoftware.utils.Luhn;
 
 @Entity
-public class ReceiptCreditCard extends ReceiptMethod {
+public class CreditCard extends BaseMethod implements PaymentMethod {
 
   @Basic(optional = false) private String number;
+  @Basic(optional = false) private String ccv;
+  @Basic(optional = false) private String expDate;
 
-  public ReceiptCreditCard() {
+  public CreditCard() {
     super();
   }
 
-  public ReceiptCreditCard(JsonNode data) {
+  public CreditCard(JsonNode data) {
     super(data);
     setNumber(JsonUtils.getString(data, "number"));
+    setCCV(JsonUtils.getString(data, "ccv"));
+    setExpDate(JsonUtils.getString(data, "expDate"));
   }
 
   @Override
   public ObjectNode serialize() {
     ObjectNode node = super.serialize();
     node.put("number", getNumber());
+    node.put("ccv", getCCV());
+    node.put("expDate", getExpDate());
     return node;
   }
 
@@ -56,15 +62,41 @@ public class ReceiptCreditCard extends ReceiptMethod {
       }
     }
 
-    return reasons;
+    if (ccv == null) {
+      reasons.add("ccv");
+    }
+    else {
+      Pattern ccvPattern = Pattern.compile("^[0-9]{3,4}$");
+      if (!ccvPattern.matcher(ccv).matches()) {
+        reasons.add("ccv");
+      }
+    }
+
+    if (expDate == null) {
+      reasons.add("expDate");
+    }
+    else {
+      Pattern expDatePattern = Pattern.compile("^(0[1-9]|1[0-2])\\/([0-9]{4}|[0-9]{2})$");
+      if (!expDatePattern.matcher(expDate).matches()) {
+        reasons.add("expDate");
+      }
+    }
+
+    return reasons;    
   }
 
   @Override
-  public Boolean pay() {
+  public Boolean pay(float total) {
     return false;
   }
 
   public String getNumber() { return number; }
-  public void setNumber(String number) { this.number = number; }
+  public void setNumber(String number) { this.number = number.trim().replaceAll("-", ""); }
+
+  public String getCCV() { return ccv; }
+  public void setCCV(String ccv) { this.ccv = ccv.trim(); }
+
+  public String getExpDate() { return expDate; }
+  public void setExpDate(String expDate) { this.expDate = expDate.trim(); }
 
 }

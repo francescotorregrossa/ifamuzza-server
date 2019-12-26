@@ -12,17 +12,17 @@ import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
 import com.ifamuzza.ingegneriadelsoftware.utils.Luhn;
 
 @Entity
-public class PaymentCreditCard extends PaymentMethod {
+public class BankTransfer extends BaseMethod implements ReceiptMethod {
 
   @Basic(optional = false) private String number;
   @Basic(optional = false) private String ccv;
   @Basic(optional = false) private String expDate;
 
-  public PaymentCreditCard() {
+  public BankTransfer() {
     super();
   }
 
-  public PaymentCreditCard(JsonNode data) {
+  public BankTransfer(JsonNode data) {
     super(data);
     setNumber(JsonUtils.getString(data, "number"));
     setCCV(JsonUtils.getString(data, "ccv"));
@@ -86,7 +86,7 @@ public class PaymentCreditCard extends PaymentMethod {
   }
 
   @Override
-  public Boolean pay() {
+  public Boolean receive(float total) {
     return false;
   }
 

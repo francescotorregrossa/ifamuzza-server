@@ -9,10 +9,10 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.ifamuzza.ingegneriadelsoftware.model.payment.PaymentCreditCard;
-import com.ifamuzza.ingegneriadelsoftware.model.payment.PaymentInvalid;
+import com.ifamuzza.ingegneriadelsoftware.model.payment.CreditCard;
+import com.ifamuzza.ingegneriadelsoftware.model.payment.Invalid;
 import com.ifamuzza.ingegneriadelsoftware.model.payment.PaymentMethod;
-import com.ifamuzza.ingegneriadelsoftware.model.payment.PaymentPayPal;
+import com.ifamuzza.ingegneriadelsoftware.model.payment.PayPal;
 import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
 
 @Entity
@@ -43,18 +43,18 @@ public class Customer extends User {
     if (paymentMethod != null) {
       String type = JsonUtils.getString(paymentMethod, "type");
       if (type == null) {
-        setPaymentMethod(new PaymentInvalid());
+        setPaymentMethod(new Invalid());
       }
       else {
         switch (type) {
           case "creditcard":
-            setPaymentMethod(new PaymentCreditCard(paymentMethod));
+            setPaymentMethod(new CreditCard(paymentMethod));
             break;
           case "paypal":
-            setPaymentMethod(new PaymentPayPal(paymentMethod));
+            setPaymentMethod(new PayPal(paymentMethod));
             break;
           default:
-            setPaymentMethod(new PaymentInvalid());
+            setPaymentMethod(new Invalid());
             break;
         }
       }

@@ -10,15 +10,15 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
 
 @Entity
-public class PaymentPayPal extends PaymentMethod {
+public class PayPal extends BaseMethod implements PaymentMethod, ReceiptMethod {
 
   @Basic(optional = false) private String payPalAccessToken;
 
-  public PaymentPayPal() {
+  public PayPal() {
     super();
   }
 
-  public PaymentPayPal(JsonNode data) {
+  public PayPal(JsonNode data) {
     super(data);
     setPayPalAccessToken(JsonUtils.getString(data, "payPalAccessToken"));
   }
@@ -42,7 +42,12 @@ public class PaymentPayPal extends PaymentMethod {
   }
 
   @Override
-  public Boolean pay() {
+  public Boolean pay(float total) {
+    return false;
+  }
+
+  @Override
+  public Boolean receive(float total) {
     return false;
   }
 

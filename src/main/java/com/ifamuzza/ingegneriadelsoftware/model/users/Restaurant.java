@@ -13,10 +13,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.ifamuzza.ingegneriadelsoftware.model.receipt.ReceiptCreditCard;
-import com.ifamuzza.ingegneriadelsoftware.model.receipt.ReceiptInvalid;
-import com.ifamuzza.ingegneriadelsoftware.model.receipt.ReceiptMethod;
-import com.ifamuzza.ingegneriadelsoftware.model.receipt.ReceiptPayPal;
+import com.ifamuzza.ingegneriadelsoftware.model.payment.BankTransfer;
+import com.ifamuzza.ingegneriadelsoftware.model.payment.Invalid;
+import com.ifamuzza.ingegneriadelsoftware.model.payment.ReceiptMethod;
+import com.ifamuzza.ingegneriadelsoftware.model.payment.PayPal;
 import com.ifamuzza.ingegneriadelsoftware.utils.Geocoder;
 import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
 
@@ -64,18 +64,18 @@ public class Restaurant extends User {
     if (receiptMethod != null) {
       String type = JsonUtils.getString(receiptMethod, "type");
       if (type == null) {
-        setReceiptMethod(new ReceiptInvalid());
+        setReceiptMethod(new Invalid());
       }
       else {
         switch (type) {
-          case "creditcard":
-            setReceiptMethod(new ReceiptCreditCard(receiptMethod));
+          case "banktransfer":
+            setReceiptMethod(new BankTransfer(receiptMethod));
             break;
           case "paypal":
-            setReceiptMethod(new ReceiptPayPal(receiptMethod));
+            setReceiptMethod(new PayPal(receiptMethod));
             break;
           default:
-            setReceiptMethod(new ReceiptInvalid());
+            setReceiptMethod(new Invalid());
             break;
         }
       }

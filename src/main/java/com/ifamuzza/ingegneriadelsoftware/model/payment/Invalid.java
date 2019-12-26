@@ -1,4 +1,4 @@
-package com.ifamuzza.ingegneriadelsoftware.model.receipt;
+package com.ifamuzza.ingegneriadelsoftware.model.payment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +10,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Entity
-public class ReceiptInvalid extends ReceiptMethod {
+public class Invalid extends BaseMethod implements PaymentMethod, ReceiptMethod {
 
-  public ReceiptInvalid() {
+  public Invalid() {
     super();
   }
 
-  public ReceiptInvalid(JsonNode data) {
+  public Invalid(JsonNode data) {
     super(data);
   }
 
@@ -35,7 +35,12 @@ public class ReceiptInvalid extends ReceiptMethod {
   }
 
   @Override
-  public Boolean pay() {
+  public Boolean pay(float total) {
+    return false;
+  }
+
+  @Override
+  public Boolean receive(float total) {
     return false;
   }
 
