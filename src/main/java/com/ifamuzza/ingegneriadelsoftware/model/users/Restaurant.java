@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ifamuzza.ingegneriadelsoftware.model.payment.BankTransfer;
 import com.ifamuzza.ingegneriadelsoftware.model.payment.Invalid;
-import com.ifamuzza.ingegneriadelsoftware.model.payment.ReceiptMethod;
+import com.ifamuzza.ingegneriadelsoftware.model.payment.BaseMethod;
 import com.ifamuzza.ingegneriadelsoftware.model.payment.PayPal;
 import com.ifamuzza.ingegneriadelsoftware.utils.Geocoder;
 import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
@@ -31,7 +31,7 @@ public class Restaurant extends User {
   @Basic(optional = false) private Integer downPayment;
 
   @OneToOne
-  @Basic(optional = false) private ReceiptMethod receiptMethod;
+  @Basic(optional = false) private BaseMethod receiptMethod;
 
   @Basic(optional = false) private Double latitude;
   @Basic(optional = false) private Double longitude;
@@ -216,8 +216,8 @@ public class Restaurant extends User {
   public Integer getDownPayment() { return downPayment; }
   public void setDownPayment(Integer downPayment) { this.downPayment = downPayment == null ? null : downPayment; }
 
-  public ReceiptMethod getReceiptMethod() { return receiptMethod; }
-  public void setReceiptMethod(ReceiptMethod receiptMethod) { this.receiptMethod = receiptMethod == null ? null : receiptMethod; }
+  public BaseMethod getReceiptMethod() { return receiptMethod; }
+  public void setReceiptMethod(BaseMethod receiptMethod) { this.receiptMethod = receiptMethod == null ? null : receiptMethod; }
 
   public Double getLatitude() { return latitude; }
   public Double getLongitude() { return longitude; }

@@ -18,10 +18,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.ifamuzza.ingegneriadelsoftware.model.users.Customer;
 import com.ifamuzza.ingegneriadelsoftware.model.users.Restaurant;
 import com.ifamuzza.ingegneriadelsoftware.model.users.User;
-import com.ifamuzza.ingegneriadelsoftware.model.payment.PaymentMethod;
+import com.ifamuzza.ingegneriadelsoftware.model.payment.BaseMethod;
 import com.ifamuzza.ingegneriadelsoftware.repository.UserRepository;
 import com.ifamuzza.ingegneriadelsoftware.utils.Geocoder;
-import com.ifamuzza.ingegneriadelsoftware.repository.MethodRepository;
+import com.ifamuzza.ingegneriadelsoftware.repository.BaseMethodRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,8 +39,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ApiHandler {
 	
 	@Autowired private UserRepository userRepository;
-	@Autowired private MethodRepository methodRepository;
-	// @Autowired private MethodRepository<PaymentMethod> methodRepository;
+	@Autowired private BaseMethodRepository methodRepository;
 
 
 	@GetMapping(value = "/search", produces = "application/json")
@@ -244,7 +243,7 @@ public class ApiHandler {
 			c.setAccessToken(accessToken);
 
 			// save the payment method (if given) and the new user
-			PaymentMethod p = c.getPaymentMethod();
+			BaseMethod p = c.getPaymentMethod();
 			if (p != null) {
 				methodRepository.save(p);
 			}

@@ -12,7 +12,7 @@ import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
 import com.ifamuzza.ingegneriadelsoftware.utils.Luhn;
 
 @Entity
-public class CreditCard extends BaseMethod implements PaymentMethod {
+public class CreditCard extends BaseMethod {
 
   @Basic(optional = false) private String number;
   @Basic(optional = false) private String ccv;

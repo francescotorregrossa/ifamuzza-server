@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ifamuzza.ingegneriadelsoftware.model.payment.CreditCard;
 import com.ifamuzza.ingegneriadelsoftware.model.payment.Invalid;
-import com.ifamuzza.ingegneriadelsoftware.model.payment.PaymentMethod;
+import com.ifamuzza.ingegneriadelsoftware.model.payment.BaseMethod;
 import com.ifamuzza.ingegneriadelsoftware.model.payment.PayPal;
 import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
 
@@ -26,7 +26,7 @@ public class Customer extends User {
   @Basic(optional = true) private String allergies;
 
   @OneToOne
-  @Basic(optional = true) private PaymentMethod paymentMethod;
+  @Basic(optional = true) private BaseMethod paymentMethod;
 
   public Customer() {
     super();
@@ -148,7 +148,7 @@ public class Customer extends User {
   public String getAllergies() { return allergies; }
   public void setAllergies(String allergies) { this.allergies = allergies == null ? null :  allergies.trim(); }
 
-  public PaymentMethod getPaymentMethod() { return paymentMethod; }
-  public void setPaymentMethod(PaymentMethod paymentMethod) { this.paymentMethod = paymentMethod == null ? null :  paymentMethod; }
+  public BaseMethod getPaymentMethod() { return paymentMethod; }
+  public void setPaymentMethod(BaseMethod paymentMethod) { this.paymentMethod = paymentMethod == null ? null :  paymentMethod; }
 
 }

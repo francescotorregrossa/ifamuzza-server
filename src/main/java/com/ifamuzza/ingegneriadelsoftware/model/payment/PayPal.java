@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
 
 @Entity
-public class PayPal extends BaseMethod implements PaymentMethod, ReceiptMethod {
+public class PayPal extends BaseMethod {
 
   @Basic(optional = false) private String payPalAccessToken;
 

@@ -13,6 +13,8 @@ import javax.persistence.InheritanceType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ifamuzza.ingegneriadelsoftware.model.JsonPrivateSerialization;
+import com.ifamuzza.ingegneriadelsoftware.model.Validable;
 import com.ifamuzza.ingegneriadelsoftware.utils.JsonUtils;
 
 import javax.persistence.GeneratedValue;
@@ -20,7 +22,7 @@ import javax.persistence.GenerationType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class BaseMethod implements Method {
+public abstract class BaseMethod implements Validable, JsonPrivateSerialization {
 
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
@@ -70,6 +72,15 @@ public abstract class BaseMethod implements Method {
     }
 
     return reasons;
+  }
+
+
+  public Boolean pay(float total) {
+    throw new UnsupportedOperationException("This method does not support payment.");
+  }
+
+  public Boolean receive(float total) {
+    throw new UnsupportedOperationException("This method does not support receipt.");
   }
 
   public Integer getId() { return id; }

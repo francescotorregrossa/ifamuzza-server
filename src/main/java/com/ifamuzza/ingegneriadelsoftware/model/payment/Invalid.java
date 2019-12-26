@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Entity
-public class Invalid extends BaseMethod implements PaymentMethod, ReceiptMethod {
+public class Invalid extends BaseMethod {
 
   public Invalid() {
     super();
