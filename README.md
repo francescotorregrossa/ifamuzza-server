@@ -21,8 +21,6 @@ Configura l'utente root di MySQL con password 'root', se la vuoi cambiare non te
 ```
 mysqladmin -u root password 'root'
 ```
-_inserisci la password del computer_
-
 
 
 Accedi a MySQL da terminale.
