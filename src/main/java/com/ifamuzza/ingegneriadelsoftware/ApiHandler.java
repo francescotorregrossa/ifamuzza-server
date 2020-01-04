@@ -153,11 +153,12 @@ public class ApiHandler {
 				return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(u.serialize());
 			} catch (JsonProcessingException e) {
 				e.printStackTrace();
+				endClientSession(response, "credentials");
 				return null;
 			}
 		}
 
-		endClientSession(response, String.join(", ", error));
+		endClientSession(response, "credentials");
 		return null;
 	}
 
@@ -172,7 +173,7 @@ public class ApiHandler {
 		}
 		if (r == null) {
 			endClientSession(response, null);
-				return null;
+			return null;
 		}
 
 		List<String> error = r.validate();
@@ -202,12 +203,13 @@ public class ApiHandler {
 				return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(u.serialize());
 			} catch (JsonProcessingException e) {
 				e.printStackTrace();
+				endClientSession(response, "credentials");
 				return null;
 			}
 
 		}
 
-		endClientSession(response, String.join(", ", error));
+		endClientSession(response, "credentials");
 		return null;
 	}
 
