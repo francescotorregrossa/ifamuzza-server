@@ -81,7 +81,7 @@ public abstract class User implements Validable, JsonPrivateSerialization, JsonP
     else {
       password = password.trim();
       // check password strength
-      Pattern passwordPattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
+      Pattern passwordPattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$");
       if (!passwordPattern.matcher(password).matches()) {
         reasons.add("password");
       }

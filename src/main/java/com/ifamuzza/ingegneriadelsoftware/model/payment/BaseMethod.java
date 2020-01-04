@@ -55,7 +55,7 @@ public abstract class BaseMethod implements Validable, JsonPrivateSerialization 
       reasons.add("holder");
     }
     else {
-      Pattern holderPattern = Pattern.compile("^([a-zA-Z ]){2,200}$");
+      Pattern holderPattern = Pattern.compile("^([a-zA-Z ']){2,200}$");
       if (!holderPattern.matcher(holder).matches()) {
         reasons.add("holder");
       }
@@ -65,7 +65,7 @@ public abstract class BaseMethod implements Validable, JsonPrivateSerialization 
       reasons.add("address");
     }
     else {
-      Pattern addressPattern = Pattern.compile("^([a-zA-Z0-9 ,]){2,200}$");
+      Pattern addressPattern = Pattern.compile("^([a-zA-Z0-9 ,']){2,200}$");
       if (!addressPattern.matcher(address).matches()) {
         reasons.add("address");
       }

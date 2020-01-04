@@ -36,7 +36,7 @@ public class Customer extends User {
     super(data);
     JsonNode paymentMethod = data.get("paymentMethod");
     setFirstName(JsonUtils.getString(data, "firstName"));
-    setLasttName(JsonUtils.getString(data, "lastName"));
+    setLastName(JsonUtils.getString(data, "lastName"));
     setPhone(JsonUtils.getString(data, "phone"));
     setAddress(JsonUtils.getString(data, "address"));
     setAllergies(JsonUtils.getString(data, "allergies"));
@@ -67,8 +67,8 @@ public class Customer extends User {
     if (getFirstName() != null) {
       node.put("firstName", getFirstName());
     }
-    if (getLasttName() != null) {
-      node.put("lastName", getLasttName());
+    if (getLastName() != null) {
+      node.put("lastName", getLastName());
     }
     if (getPhone() != null) {
       node.put("phone", getPhone());
@@ -92,8 +92,8 @@ public class Customer extends User {
     if (getFirstName() != null) {
       node.put("firstName", getFirstName());
     }
-    if (getLasttName() != null) {
-      node.put("lastName", getLasttName());
+    if (getLastName() != null) {
+      node.put("lastName", getLastName());
     }
     return node;
   }
@@ -102,7 +102,7 @@ public class Customer extends User {
   public List<String> validate() {
     List<String> reasons = super.validate();
     
-    Pattern namePattern = Pattern.compile("^([a-zA-Z ]){2,100}$");
+    Pattern namePattern = Pattern.compile("^([a-zA-Z' ]){2,100}$");
     if (firstName != null && !namePattern.matcher(firstName).matches()) {
       reasons.add("firstName");
     }
@@ -115,12 +115,12 @@ public class Customer extends User {
       reasons.add("phone");
     }
 
-    Pattern addressPattern = Pattern.compile("^([a-zA-Z0-9 ,]){2,200}$");
+    Pattern addressPattern = Pattern.compile("^([a-zA-Z0-9 ,']){2,200}$");
     if (address != null && !addressPattern.matcher(address).matches()) {
       reasons.add("address");
     }
 
-    Pattern allergiesPattern = Pattern.compile("^([a-zA-Z0-9 ,]){2,200}$");
+    Pattern allergiesPattern = Pattern.compile("^([a-zA-Z0-9 ,']){2,200}$");
     if (allergies != null && !allergiesPattern.matcher(allergies).matches()) {
       reasons.add("allergies");
     }
@@ -136,8 +136,8 @@ public class Customer extends User {
   public String getFirstName() { return firstName; }
   public void setFirstName(String firstName) { this.firstName = firstName == null ? null : firstName.trim(); }
 
-  public String getLasttName() { return lastName; }
-  public void setLasttName(String lastName) { this.lastName = lastName == null ? null : lastName.trim(); }
+  public String getLastName() { return lastName; }
+  public void setLastName(String lastName) { this.lastName = lastName == null ? null : lastName.trim(); }
 
   public String getPhone() { return phone; }
   public void setPhone(String phone) { this.phone = phone == null ? null :  phone.trim(); }
