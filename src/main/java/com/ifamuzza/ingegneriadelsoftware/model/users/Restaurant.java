@@ -150,6 +150,7 @@ public class Restaurant extends User {
       for (String ot: openingTime) {
         if (!openingTimePattern.matcher(ot).matches()) {
           reasons.add("openingTime");
+          break;
         }
       }
     }
