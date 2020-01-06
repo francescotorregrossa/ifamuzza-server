@@ -122,7 +122,7 @@ public class ApiHandler {
 			e.printStackTrace();
 		}
 		if (c == null) {
-			endClientSession(response, null);
+			endClientSession(response, "credentials");
 			return null;
 		}
 
@@ -172,7 +172,7 @@ public class ApiHandler {
 			e.printStackTrace();
 		}
 		if (r == null) {
-			endClientSession(response, null);
+			endClientSession(response, "credentials");
 			return null;
 		}
 
