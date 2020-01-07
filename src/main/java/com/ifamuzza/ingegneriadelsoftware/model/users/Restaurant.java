@@ -126,7 +126,7 @@ public class Restaurant extends User {
       reasons.add("name");
     }
     else {
-      Pattern namePattern = Pattern.compile("^([a-zA-Z ']){2,200}$");
+      Pattern namePattern = Pattern.compile("^([a-zA-Z0-9 .,']){2,200}$");
       if (!namePattern.matcher(name).matches()) {
         reasons.add("name");
       }
